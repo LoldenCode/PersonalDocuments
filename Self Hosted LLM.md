@@ -1,5 +1,12 @@
 # Configuring a Self Hosted LLM (Large Language Model) with it through Rewst
 
+- [Configuring a Self Hosted LLM (Large Language Model) with it through Rewst](#configuring-a-self-hosted-llm-large-language-model-with-it-through-rewst)
+  - [Installing your LLM](#installing-your-llm)
+    - [Option 1 - Docker](#option-1---docker)
+    - [Option 2 - Windows Native](#option-2---windows-native)
+  - [Allow access from Rewst](#allow-access-from-rewst)
+  - [Create a component to utilize this](#create-a-component-to-utilize-this)
+
 Often times, there is sensitive data that you may want to run through a tool like ChatGPT. However, keeping security in mind, this is often not the safest idea. Instead, you can set up a locally hosted LLM that does not have the opportunity to leak any information to the outside world.
 
 <sub>This tutorial is for a deployment in Windows, with an NVIDIA RTX graphics card. If you need assistance with another operating system, or would prefer to use Windows Subsystems for Linux, ask in the Discord! @lolden (and plenty of others) should be able to help get you on your way!</sub>
@@ -12,47 +19,47 @@ We will be using [Ooobabooga](https://github.com/oobabooga/text-generation-webui
 
 1. Download Choco package manager.
 
-    * ```ps
-      Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+        ```ps
+        Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
         ```
 
 2. Download drivers and dependencies.
 
-```ps
-choco install nvidia-display-driver cuda git docker-desktop
-```
+        ```ps
+        choco install nvidia-display-driver cuda git docker-desktop
+        ```
 
-* At this step, I personally ran into an error during the install of cuda. After attempting to run it manually (`%temp%\chocolatey\cuda\<vers>\cuda_windows.exe`) I found that a system restart was required.
+      * At this step, I personally ran into an error during the install of cuda. After attempting to run it manually (`%temp%\chocolatey\cuda\<vers>\cuda_windows.exe`) I found that a system restart was required.
 
-4. Install WSL.
+3. Install WSL.
 
-```ps
-wsl --install
-```
+        ```ps
+        wsl --install
+        ```
 
-5. Reboot your system.
-6. Open a PowerShell session and clone the repo to a location you'd prefer. In this example, we're going to use the `C:\TextGen\` folder.
+4. Reboot your system.
+5. Open a PowerShell session and clone the repo to a location you'd prefer. In this example, we're going to use the `C:\TextGen\` folder.
 
-```ps
-cd C:\TextGen
-git clone https://github.com/oobabooga/text-generation-webui
-```
+        ```ps
+        cd C:\TextGen
+        git clone https://github.com/oobabooga/text-generation-webui
+        ```
 
-7. Download and place your models in the model folder.
+6. Download and place your models in the model folder.
    1. If your GPU has at least 10GB VRAM, we'll use the [Llama-2-13B-chat-GPTQ](https://huggingface.co/TheBloke/Llama-2-13B-chat-GPTQ) model. Navigate to the root folder (`C:\TextGen\text-generation-webui` in our example) and run `python .\download-model.py TheBloke/Llama-2-13B-chat-GPTQ`.
    2. If you are running a lower end RTX card, we'll use the 7B version. This takes roughly half the VRAM, but is trained on only 7 billion tokens, rather than the 13 billion of the prior. Navigate to the root folder (`C:\TextGen\text-generation-webui` in our example) and run `python .\download-model.py TheBloke/Llama-2-7B-chat-GPTQ`.
-8. Copy the docker files to your root folder.
+7. Copy the docker files to your root folder.
 
-```ps
-copy .\docker\* .\
-copy .env.example .env
-notepad .env
-```
+        ```ps
+        copy .\docker\* .\
+        copy .env.example .env
+        notepad .env
+        ```
 
-9. Modify the newly opened text document, and change the CLI_ARGS to `--model TheBloke_Llama-2-13B-chat-GPTQ --wbits 4 --groupsize 128 --loader exllama_hf --verbose --listen --auto-devices --api` (replace 13B with 7B if followed in step 6)
-10. Run `docker compose up`. This will take a few minutes to build the first time.
-11. Verify the webUI is working (Navigate to `http://localhost:7860`)
-12. If accessible, continue on.
+8. Modify the newly opened text document, and change the CLI_ARGS to `--model TheBloke_Llama-2-13B-chat-GPTQ --wbits 4 --groupsize 128 --loader exllama_hf --verbose --listen --auto-devices --api` (replace 13B with 7B if followed in step 6)
+9. Run `docker compose up`. This will take a few minutes to build the first time.
+10. Verify the webUI is working (Navigate to `http://localhost:7860`)
+11. If accessible, continue on.
 
 ### Option 2 - Windows Native
 
@@ -62,7 +69,7 @@ While not preferred, we can install natively on Windows. Note that this may caus
 2. Extract this to a folder where it's going to live.
 3. Run the start_windows.bat and let it install. Choose your GPU type from the list, or CPU if you do not have a GPU capable of generating text.
 4. Run start_windows.bat again once finished.
-5. Todo: Finish writing Windows install instructions, need more disk space. 
+5. Todo: Finish writing Windows install instructions, need more disk space.
 
 ## Allow access from Rewst
 
