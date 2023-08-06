@@ -2,18 +2,37 @@
 
 - [Configuring a Self Hosted LLM (Large Language Model) with it through Rewst](#configuring-a-self-hosted-llm-large-language-model-with-it-through-rewst)
   - [Installing your LLM](#installing-your-llm)
+    - [Option 0 - Premade Docker instance](#option-0---premade-docker-instance)
     - [Option 1 - Docker](#option-1---docker)
     - [Option 2 - Windows Native](#option-2---windows-native)
   - [Allow access from Rewst](#allow-access-from-rewst)
   - [Create a component to utilize this](#create-a-component-to-utilize-this)
+  - [Bonus round!](#bonus-round)
 
 Often times, there is sensitive data that you may want to run through a tool like ChatGPT. However, keeping security in mind, this is often not the safest idea. Instead, you can set up a locally hosted LLM that does not have the opportunity to leak any information to the outside world.
 
-<sub>This tutorial is for a deployment in Windows, with an NVIDIA RTX graphics card. If you need assistance with another operating system, or would prefer to use Windows Subsystems for Linux, ask in the Discord! @lolden (and plenty of others) should be able to help get you on your way!</sub>
+<sub>This tutorial is for a deployment in Windows, with an NVIDIA RTX graphics card. If you need assistance with another operating system, or would prefer to use Windows Subsystems for Linux, ask @lolden in Discord, or take a look at [the main GitHub for this project](https://github.com/oobabooga/text-generation-webui)</sub>
 
 ## Installing your LLM
 
-We will be using [Ooobabooga](https://github.com/oobabooga/text-generation-webui) for this tutorial. This is a constantly developing project, so while you may be able to operate off the latest build in their GitHub, for the purposes of this tutorial we're going to use [Release v1.3.1](https://github.com/oobabooga/text-generation-webui/releases/tag/v1.3.1)
+We will be using [Ooobabooga](https://github.com/oobabooga/text-generation-webui) for this tutorial. This is a constantly developing project, so some instructions may change over time, but if you can follow along with Option 1, any changes needed should be fairly straightforward from terminal output.
+
+### Option 0 - Premade Docker instance
+
+For those who prefer the "**zero effort, just let me in**" mindset.
+
+1. Clone [Text Generation WebUI](https://github.com/oobabooga/text-generation-webui) to a directory.
+2. Ensure you have Docker Compose 2.17 or higher installed.
+3. CD to the directory that the repository was cloned to, then run the following:
+
+    ```ps
+    ln -s docker/{Dockerfile,docker-compose.yml,.dockerignore} .
+    cp docker/.env.example .env
+    # Edit .env and set TORCH_CUDA_ARCH_LIST based on your GPU model
+    docker compose up --build
+    ```
+
+4. Your instance should be accessible via the ports shown within the Docker UI.
 
 ### Option 1 - Docker
 
