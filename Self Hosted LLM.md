@@ -1,6 +1,6 @@
-# Configuring a Self Hosted LLM (Large Language Model) with it through Rewst
+# Configuring a Self Hosted LLM (Large Language Model) and interacting with it through Rewst
 
-- [Configuring a Self Hosted LLM (Large Language Model) with it through Rewst](#configuring-a-self-hosted-llm-large-language-model-with-it-through-rewst)
+- [Configuring a Self Hosted LLM (Large Language Model) and interacting with it through Rewst](#configuring-a-self-hosted-llm-large-language-model-and-interacting-with-it-through-rewst)
   - [Installing your LLM](#installing-your-llm)
     - [Option 0 - Premade Docker instance](#option-0---premade-docker-instance)
     - [Option 1 - Docker](#option-1---docker)
